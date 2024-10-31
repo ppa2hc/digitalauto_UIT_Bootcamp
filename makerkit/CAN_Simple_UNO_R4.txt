@@ -1,0 +1,31 @@
+#include <Arduino_CAN.h>
+
+#define SERIAL_BAUDRATE             (115200)
+#define DELAY_PERIOD                (5000)
+#define MAX_MESSAGE_SIZE            (8)
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(SERIAL_BAUDRATE);
+  //while (!Serial) { }
+
+  if (!CAN.begin(CanBitRate::BR_500k))
+  {
+    Serial.println("CAN.begin(...) failed.");
+    for (;;) {}
+  }
+
+  Serial.println("setup");
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (CAN.available())
+  {
+    Serial.println("CAN.available");
+    /* Receiving CAN message */
+    CanMsg const msg = CAN.read();
+    Serial.println(msg);
+  }
+}
