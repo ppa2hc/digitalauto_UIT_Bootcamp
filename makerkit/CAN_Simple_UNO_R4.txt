@@ -19,6 +19,14 @@ void setup() {
 
 }
 
+void printCanMsg(CanMsg const feed) {
+  for(int i = 0; i < MAX_MESSAGE_SIZE; i++) {
+    Serial.print(feed.data[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
   if (CAN.available())
@@ -27,5 +35,13 @@ void loop() {
     /* Receiving CAN message */
     CanMsg const msg = CAN.read();
     Serial.println(msg);
+
+    // copy read msg to a variable
+    CanMsg const inputMsg(msg);
+
+    if ( (inputMsg.id == 0x3E9 ) ) {  
+      printCanMsg(inputMsg);
+      Serial.println(inputMsg.data[0] & 0b1100);
+    }
   }
 }
